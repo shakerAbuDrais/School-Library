@@ -1,23 +1,30 @@
 require_relative 'nameable'
 
 class Decorator < Nameable
-    def initialize(nameable)
-        @nameable = nameable
-    end
+  def super(nameable)
+    @nameable = nameable
+  end
 
+  def correct_name
+    @nameable.correct_name
+  end
+
+  class CapitalizeDecorator < Decorator
     def correct_name
-        @nameable.correct_name
+      super.capitalize
     end
+  end
 
-    class CapitalizeDecorator < Decorator
-        def correct_name
-            super.capitalize
-        end
+  class TrimmerDecorator < Decorator
+    def correct_name
+      super.length <= 10 ? super : super.slice(0, 10)
     end
-
-    class TrimmerDecorator < Decorator
-        def correct_name
-            super.length <= 10 ? super : super.slice(0, 10)
-        end
-    end
+  end
 end
+
+person = Person.new(22, 'maximilianus')
+  person.correct_name
+  capitalizedPerson = CapitalizeDecorator.new(person)
+  capitalizedPerson.correct_name
+  capitalizedTrimmedPerson = TrimmerDecorator.new(capitalizedPerson)
+  capitalizedTrimmedPerson.correct_name
